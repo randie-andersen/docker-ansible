@@ -1,0 +1,31 @@
+- hosts: server
+  vars:
+   image: randieandersen/docker-ansible:beta
+  tasks:
+   - name: install python-docker ubuntu
+     apt:
+      name: python-docker
+      status: present
+     when:
+     - ansible_distribution == "Ubuntu"
+   - name: install python-docker CentOS
+     yum:
+      name: python-docker
+      state: present
+     when:
+     - ansible_distribution == "CentOS"
+   - name: pull image
+     docker_image:
+      name: "{{ image }}"
+      state: present
+      force: yes
+   - name: create container
+     docker_container:
+      recreate: yes
+      name: docker_ansible
+      state: started
+      image: "{{ image }}"
+      exposed_ports:
+      - 8090:80
+      published_ports:
+      - 8090:80
