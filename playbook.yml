@@ -5,7 +5,7 @@
    - name: install python-docker ubuntu
      apt:
       name: python-docker
-      status: present
+      state: present
      when:
      - ansible_distribution == "Ubuntu"
    - name: install python-docker CentOS
